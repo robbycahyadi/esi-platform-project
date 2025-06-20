@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Rekapitulasi Proyek ESI Platform</title>
+    <style>
+        body { font-family: sans-serif; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #dddddd; text-align: left; padding: 8px; vertical-align: top;}
+        thead { background-color: #f2f2f2; }
+        ul { margin: 0; padding-left: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>Rekapitulasi Final Proyek ESI Platform</h1>
+<p>Tabel ini memetakan keselarasan antara desain service Interface di Deliverable 2 dengan implementasi prototipe fungsional.</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>Layanan Utama (D1)</th>
+            <th>Service Interface (D2)</th>
+            <th>Service Operation (D2)</th>
+            <th>Portal</th>
+            <th>Implementasi Frontend (Prototipe)</th>
+            <th>Implementasi Backend (Service & Endpoint)</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>1</td>
+            <td>Account Management</td>
+            <td><code>CustomerAccountService</code></td>
+            <td><ul><li>registerAccount()</li><li>login()</li><li>updateProfile()</li></ul></td>
+            <td>Pelanggan & Internal</td>
+            <td><code>RegisterPage.js</code>, <code>LoginPage.js</code>, form di <code>MyAccountPage.js</code></td>
+            <td><code>account-service</code> (<code>POST /register</code>, <code>POST /login</code>, <code>PUT /users/:id</code>)</td>
+            <td><strong>LENGKAP</strong></td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>User Access Control</td>
+            <td><code>UserAccessControlService</code></td>
+            <td><ul><li>assignRole()</li><li>revokeAccess()</li></ul></td>
+            <td>Internal</td>
+            <td><code>AdminUserManagementPage.js</code> (CRUD Pengguna & Peran)</td>
+            <td><code>account-service</code> (<code>PUT /users/:id</code>, <code>DELETE /users/:id</code>)</td>
+            <td><strong>LENGKAP</strong></td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Service Request</td>
+            <td><code>ServiceRequestService</code></td>
+            <td><ul><li>createRequest()</li></ul></td>
+            <td>Pelanggan</td>
+            <td><code>ServiceRequestPage.js</code></td>
+            <td><code>request-service</code> (<code>POST /request</code>)</td>
+            <td><strong>LENGKAP</strong></td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>Scheduling</td>
+            <td><code>SchedulingService</code></td>
+            <td><ul><li>assignTechnician()</li><li>getSchedule()</li><li>reschedule()</li></ul></td>
+            <td>Internal</td>
+            <td><code>AdminSchedulingPage.js</code> (Kalender Interaktif & CRUD Jadwal)</td>
+            <td><code>schedule-service</code> (<code>POST /assign</code>, <code>GET /</code>, <code>PUT /:id</code>, <code>DELETE /:id</code>)</td>
+            <td><strong>LENGKAP</strong></td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>Sensor Management</td>
+            <td><code>MonitoringService</code></td>
+            <td><ul><li>submitManualData()</li><li>installSensor()</li></ul></td>
+            <td>Internal</td>
+            <td><code>AdminManualDataPage.js</code> dan <code>AdminSensorManagementPage.js</code> (CRUD Sensor)</td>
+            <td><code>field-operations-service</code> (<code>GET/POST/PUT/DELETE /sensors</code>) dan <code>field-operations-service</code> (<code>POST /manual-data</code>)</td>
+            <td><strong>LENGKAP</strong></td>
+        </tr>
+        <tr>
+            <td>6</td>
+            <td>Sample Logistics</td>
+            <td><code>SampleLogisticsService</code></td>
+            <td><ul><li>logSample()</li><li>updateLabStatus()</li></ul></td>
+            <td>Internal</td>
+            <td><code>AdminSampleLogisticsPage.js</code></td>
+            <td><code>field-operations-service</code> (<code>GET/POST /samples</code>, <code>PUT /samples/:id/status</code>)</td>
+            <td><strong>LENGKAP</strong></td>
+        </tr>
+        <tr>
+            <td>7</td>
+            <td>Lab Integration</td>
+            <td><code>LabIntegrationService</code></td>
+            <td><ul><li>uploadLabResult()</li></ul></td>
+            <td>Internal</td>
+            <td><code>AdminLabInputPage.js</code> (CRUD Hasil Lab)</td>
+            <td><code>lab-data-service</code> (<code>GET/POST/PUT/DELETE /results</code>)</td>
+            <td><strong>LENGKAP</strong></td>
+        </tr>
+        <tr>
+            <td>8</td>
+            <td>Analytics</td>
+            <td><code>AnalyticsService</code></td>
+            <td><ul><li>detectTrends()</li></ul></td>
+            <td>Pelanggan</td>
+            <td><code>AnalyticsPage.js</code> dengan grafik interaktif</td>
+            <td><code>analytics-service</code> (<code>GET /trends</code>)</td>
+            <td><strong>LENGKAP</strong></td>
+        </tr>
+        <tr>
+            <td>9</td>
+            <td>Reporting</td>
+            <td><code>ReportingService</code></td>
+            <td><ul><li>generateReport()</li><li>downloadReport()</li></ul></td>
+            <td>Internal & Pelanggan</td>
+            <td>Tombol di <code>AdminSchedulingPage</code> & <code>ServiceDetailPage</code></td>
+            <td><code>reporting-service</code> (<code>POST /generate</code>, <code>GET /download/:id</code>)</td>
+            <td><strong>LENGKAP</strong></td>
+        </tr>
+        <tr>
+            <td>10</td>
+            <td>Consultation</td>
+            <td><code>ConsultationService</code></td>
+            <td><ul><li>requestConsultation()</li></ul></td>
+            <td>Pelanggan</td>
+            <td>Tombol 'Minta Konsultasi' di <code>ServiceDetailPage.js</code></td>
+            <td></td>
+            <td><strong>LENGKAP</strong></td>
+        </tr>
+        <tr>
+            <td>11</td>
+            <td>Subscription Management</td>
+            <td><code>SubscriptionService</code></td>
+            <td><ul><li>getSubscriptionStatus()</li></ul></td>
+            <td>Pelanggan</td>
+            <td>Widget status langganan di <code>MyAccountPage.js</code></td>
+            <td>(tidak diimplementasi di prototipe)</td>
+            <td><strong>UI Selesai</strong></td>
+        </tr>
+        <tr>
+            <td>12</td>
+            <td>Payment</td>
+            <td><code>PaymentService</code></td>
+            <td><ul><li>processPayment()</li><li>checkPaymentStatus()</li></ul></td>
+            <td>Pelanggan</td>
+            <td>Riwayat tagihan & tombol bayar di <code>MyAccountPage.js</code></td>
+            <td>(tidak diimplementasi di prototipe)</td>
+            <td><strong>UI Selesai</strong></td>
+        </tr>
+        <tr>
+            <td>13</td>
+            <td>Platform Management</td>
+            <td><code>PlatformManagementService</code></td>
+            <td><ul><li>monitorSystemHealth()</li></ul></td>
+            <td>Internal</td>
+            <td><code>AdminPlatformStatusPage.js</code> (Mockup Dasbor Monitoring)</td>
+            <td>(Konsep: Prometheus, tidak diimplementasi di prototipe)</td>
+            <td><strong>UI Selesai</strong></td>
+        </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

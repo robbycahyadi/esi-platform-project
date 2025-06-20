@@ -113,15 +113,53 @@ app.get('/samples/pending-lab', staffOnly, async (req, res) => {
     }
 });
 
+// PUT: Mengubah status sebuah sampel log DAN mengupdate ServiceRequest jika perlu
 app.put('/samples/:logId/status', staffOnly, async (req, res) => {
     const { logId } = req.params;
-    const { status } = req.body;
-    if (!status) return res.status(400).json({ message: 'Status wajib diisi.' });
+    const { status: newStatus } = req.body;
+
+    if (!newStatus) {
+        return res.status(400).json({ message: 'Status wajib diisi.' });
+    }
+
+    const client = await pool.connect();
     try {
-        const result = await pool.query('UPDATE SampleLogs SET status = $1 WHERE logId = $2 RETURNING *', [status, logId]);
-        if (result.rows.length === 0) return res.status(404).json({ message: 'Log sampel tidak ditemukan.' });
-        res.status(200).json(result.rows[0]);
-    } catch (e) { res.status(500).json({ message: e.message }); }
+        await client.query('BEGIN');
+
+        // Langkah 1: Update status di tabel SampleLogs dan ambil requestId-nya
+        const updateSampleQuery = `
+            UPDATE SampleLogs SET status = $1 WHERE logId = $2 RETURNING requestId;
+        `;
+        const sampleResult = await client.query(updateSampleQuery, [newStatus, logId]);
+
+        if (sampleResult.rows.length === 0) {
+            throw new Error('Log sampel tidak ditemukan.');
+        }
+
+        const { requestid } = sampleResult.rows[0];
+
+        // Langkah 2: Jika status baru adalah 'Dianalisis' atau 'Selesai', update juga ServiceRequest utama
+        // Ini adalah logika bisnis yang menghubungkan keduanya.
+        if (newStatus === 'Dianalisis' || newStatus === 'Selesai') {
+            let newRequestStatus = newStatus === 'Selesai' ? 'Data Processing' : 'Dianalisis';
+
+            const updateRequestQuery = `
+                UPDATE ServiceRequests SET status = $1 WHERE requestId = $2;
+            `;
+            await client.query(updateRequestQuery, [newRequestStatus, requestid]);
+            console.log(`[FIELD-OPS] Status untuk ServiceRequest ${requestid} diubah menjadi ${newRequestStatus}`);
+        }
+        
+        await client.query('COMMIT');
+        res.status(200).json({ message: `Status log ${logId} berhasil diubah menjadi ${newStatus}` });
+
+    } catch (error) {
+        await client.query('ROLLBACK');
+        console.error(`Error PUT /samples/${logId}/status:`, error);
+        res.status(500).json({ message: error.message || 'Server error' });
+    } finally {
+        client.release();
+    }
 });
 
 // ======== MANUAL DATA INPUT ENDPOINTS ========

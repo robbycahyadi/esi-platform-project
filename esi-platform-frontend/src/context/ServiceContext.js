@@ -53,6 +53,7 @@ export const ServiceProvider = ({ children }) => {
     // Nilai yang akan dibagikan ke semua komponen
     const value = {
         services,
+        setServices,
         loading,
         error,
         refreshServices,

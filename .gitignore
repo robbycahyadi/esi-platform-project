@@ -9,3 +9,4 @@
 **/yarn-debug.log*
 **/yarn-error.log*
 /esi-platform-frontend/build
+/esi-platform-backend/reporting-service/generated-reports/
